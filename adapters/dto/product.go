@@ -3,9 +3,9 @@ package dto
 import "github.com/XavierCabeto/takeaway/application"
 
 type Product struct {
-	ID     string  `json:"id"`
-	Name   string  `json:"name"`
-	Price  float64 `json:"price"`
+	ID    string  `json:"id"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
 }
 
 func NewProduct() *Product {

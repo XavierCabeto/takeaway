@@ -2,11 +2,12 @@ package db_test
 
 import (
 	"database/sql"
+	"log"
+	"testing"
+
 	"github.com/XavierCabeto/takeaway/adapters/db"
 	"github.com/XavierCabeto/takeaway/application"
 	"github.com/stretchr/testify/require"
-	"log"
-	"testing"
 )
 
 var Db *sql.DB
@@ -21,8 +22,7 @@ func createTable(db *sql.DB) {
 	table := `CREATE TABLE products (
 			"id" string,
 			"name" string,
-			"price" float,
-			"status" string
+			"price" float
 			);`
 	stmt, err := db.Prepare(table)
 	if err != nil {
@@ -48,7 +48,14 @@ func TestProductDb_Get(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, "Product Test", product.GetName())
 	require.Equal(t, 0.0, product.GetPrice())
-	require.Equal(t, "disabled", product.GetStatus())
+}
+
+func TestProductDb_GetAll(t *testing.T) {
+	setUp()
+	defer Db.Close()
+	productDb := db.NewProductDb(Db)
+	_, err := productDb.GetAll()
+	require.Nil(t, err)
 }
 
 func TestProductDb_Save(t *testing.T) {

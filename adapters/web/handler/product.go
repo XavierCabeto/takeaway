@@ -2,16 +2,20 @@ package handler
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/XavierCabeto/takeaway/adapters/dto"
 	"github.com/XavierCabeto/takeaway/application"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 func MakeProductHandlers(r *mux.Router, n *negroni.Negroni, service application.ProductServiceInterface) {
 	r.Handle("/product/{id}", n.With(
 		negroni.Wrap(getProduct(service)),
+	)).Methods("GET", "OPTIONS")
+	r.Handle("/product", n.With(
+		negroni.Wrap(getAllProduct(service)),
 	)).Methods("GET", "OPTIONS")
 	r.Handle("/product", n.With(
 		negroni.Wrap(createProduct(service)),
@@ -29,6 +33,22 @@ func getProduct(service application.ProductServiceInterface) http.Handler {
 			return
 		}
 		err = json.NewEncoder(w).Encode(product)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	})
+}
+
+func getAllProduct(service application.ProductServiceInterface) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		products, err := service.GetAll()
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		err = json.NewEncoder(w).Encode(products)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return

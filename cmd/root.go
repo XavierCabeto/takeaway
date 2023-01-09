@@ -3,10 +3,11 @@ package cmd
 import (
 	"database/sql"
 	"fmt"
-	"github.com/XavierCabeto/takeaway/application"
 	"os"
-	"github.com/spf13/cobra"
+
 	dbInfra "github.com/XavierCabeto/takeaway/adapters/db"
+	"github.com/XavierCabeto/takeaway/application"
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -14,7 +15,7 @@ import (
 
 var cfgFile string
 
-var db, _ = sql.Open("sqlite3","db.sqlite")
+var db, _ = sql.Open("sqlite3", "db.sqlite")
 var productDb = dbInfra.NewProductDb(db)
 var productService = application.ProductService{Persistence: productDb}
 
