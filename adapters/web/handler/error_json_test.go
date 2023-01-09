@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestHandler_jsonError(t *testing.T) {

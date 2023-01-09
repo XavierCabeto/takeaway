@@ -1,10 +1,11 @@
 package application_test
 
 import (
-	"github.com/XavierCabeto/takeaway/application"
+	"testing"
+
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
-	"testing"
+	"github.com/XavierCabeto/takeaway/application"
 )
 
 func TestProduct_IsValid(t *testing.T) {

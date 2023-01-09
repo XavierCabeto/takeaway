@@ -2,6 +2,7 @@ package application
 
 import (
 	"errors"
+
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
 )
@@ -19,11 +20,13 @@ type ProductInterface interface {
 
 type ProductServiceInterface interface {
 	Get(id string) (ProductInterface, error)
+	GetAll() ([]ProductInterface, error)
 	Create(name string, price float64) (ProductInterface, error)
 }
 
 type ProductReader interface {
 	Get(id string) (ProductInterface, error)
+	GetAll() ([]ProductInterface, error)
 }
 
 type ProductWriter interface {
@@ -36,14 +39,14 @@ type ProductPersistenceInterface interface {
 }
 
 type Product struct {
-	ID     string  `valid:"uuidv4"`
-	Name   string  `valid:"required"`
-	Price  float64 `valid:"float,optional"`
+	ID    string  `valid:"uuidv4"`
+	Name  string  `valid:"required"`
+	Price float64 `valid:"float,optional"`
 }
 
 func NewProduct() *Product {
 	product := Product{
-		ID:     uuid.NewV4().String(),
+		ID: uuid.NewV4().String(),
 	}
 	return &product
 }

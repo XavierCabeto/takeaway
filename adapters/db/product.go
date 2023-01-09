@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+
 	"github.com/XavierCabeto/takeaway/application"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -25,6 +26,23 @@ func (p *ProductDb) Get(id string) (application.ProductInterface, error) {
 		return nil, err
 	}
 	return &product, nil
+}
+
+func (p *ProductDb) GetAll() ([]application.ProductInterface, error) {
+	products := []application.ProductInterface{}
+	stmt, err := p.db.Query("select id, name, price from products")
+	if err != nil {
+		return nil, err
+	}
+	for stmt.Next() {
+		var product application.Product
+		err := stmt.Scan(&product.ID, &product.Name, &product.Price) 
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, &product)
+	}
+	return products, nil
 }
 
 func (p *ProductDb) Save(product application.ProductInterface) (application.ProductInterface, error) {
